@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>How Much Do You Know O'Brien / Upendo?</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:Arial,sans-serif;background:radial-gradient(circle at top,#202020,#050505 65%);color:#fff;padding:18px;display:flex;justify-content:center;align-items:center}
+.card{width:min(560px,100%);background:rgba(15,15,15,.96);border:1px solid #333;border-radius:26px;padding:22px;box-shadow:0 20px 70px #000;text-align:center}
+h1{font-size:26px;margin:4px 0 8px}.sub{color:#aaa;font-size:14px;margin-bottom:16px}
+.progressbar{height:9px;background:#292929;border-radius:99px;overflow:hidden;margin:12px 0 18px}
+#bar{height:100%;width:0;background:linear-gradient(90deg,#25d366,#8cff9d);transition:.45s}
+.picture{width:100%;max-width:390px;aspect-ratio:1/1;margin:0 auto 18px;border-radius:20px;overflow:hidden;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(2,1fr);background:#111}
+.tile{position:relative;overflow:hidden;background:#252525;transition:.65s}
+.tile::after{content:"?";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;color:#666;background:linear-gradient(135deg,#171717,#303030);transition:.65s}
+.tile.lit::after{opacity:0;transform:scale(1.4)}
+/* The hidden picture is a stylized portrait-like graphic made entirely in CSS/SVG */
+.tile .art{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500'%3E%3Cdefs%3E%3ClinearGradient id='g' x2='1' y2='1'%3E%3Cstop stop-color='%230b3d2e'/%3E%3Cstop offset='.55' stop-color='%231b8a55'/%3E%3Cstop offset='1' stop-color='%23030705'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='500' height='500' fill='url(%23g)'/%3E%3Ccircle cx='250' cy='170' r='78' fill='%23b87855'/%3E%3Cpath d='M166 166 Q250 65 334 166 Q315 105 250 92 Q185 105 166 166' fill='%23141414'/%3E%3Cpath d='M135 455 Q150 270 250 265 Q350 270 365 455' fill='%23090909'/%3E%3Cpath d='M190 335 Q250 365 310 335' stroke='%23fff' stroke-width='8' fill='none'/%3E%3Ctext x='250' y='430' text-anchor='middle' font-family='Arial' font-size='32' font-weight='bold' fill='white'%3EUPENDO%3C/text%3E%3C/svg%3E");background-size:500% 200%;background-repeat:no-repeat}
+.t1 .art{background-position:0% 0}.t2 .art{background-position:25% 0}.t3 .art{background-position:50% 0}.t4 .art{background-position:75% 0}.t5 .art{background-position:100% 0}
+.t6 .art{background-position:0% 100%}.t7 .art{background-position:25% 100%}.t8 .art{background-position:50% 100%}.t9 .art{background-position:75% 100%}.t10 .art{background-position:100% 100%}
+.tile.lit{box-shadow:inset 0 0 25px rgba(37,211,102,.45)}
+#question{font-size:21px;font-weight:800;margin:14px 0 16px}.options{display:grid;gap:10px}
+button{font:inherit;font-weight:800;border:0;border-radius:14px;padding:15px;cursor:pointer}
+.option{background:#252525;color:#fff;border:1px solid #3b3b3b;transition:.2s}.option:hover{background:#333;transform:translateY(-1px)}
+#feedback{min-height:28px;margin:12px 0;font-weight:700;color:#7dff9b}
+.stats{display:flex;justify-content:space-between;color:#aaa;font-size:13px;margin-bottom:10px}
+#result{display:none}.bigscore{font-size:56px;font-weight:900;margin:8px}
+.resultmsg{font-size:23px;font-weight:900;line-height:1.3;margin:18px 0}
+.whatsapp{display:block;text-decoration:none;background:#25D366;color:#fff;padding:17px;border-radius:16px;font-weight:900;font-size:18px;box-shadow:0 8px 25px rgba(37,211,102,.25)}
+.restart{width:100%;margin-top:12px;background:#303030;color:#fff}
+.small{font-size:12px;color:#777;margin-top:14px}
+.pulse{animation:pulse .5s ease}@keyframes pulse{50%{transform:scale(1.05)}}
+</style>
+</head>
+<body>
+<div class="card">
+<section id="quiz">
+<h1>❤️ How Much Do You Know O'Brien / Upendo?</h1>
+<div class="sub">Get answers right and reveal the picture one tile at a time 👀</div>
+
+<div class="picture" id="picture">
+  <div class="tile t1"><div class="art"></div></div><div class="tile t2"><div class="art"></div></div>
+  <div class="tile t3"><div class="art"></div></div><div class="tile t4"><div class="art"></div></div>
+  <div class="tile t5"><div class="art"></div></div><div class="tile t6"><div class="art"></div></div>
+  <div class="tile t7"><div class="art"></div></div><div class="tile t8"><div class="art"></div></div>
+  <div class="tile t9"><div class="art"></div></div><div class="tile t10"><div class="art"></div></div>
+</div>
+
+<div class="stats"><span id="progress">Question 1 of 10</span><span id="score">Score: 0</span></div>
+<div class="progressbar"><div id="bar"></div></div>
+<div id="question"></div>
+<div id="options" class="options"></div>
+<div id="feedback"></div>
+</section>
+
+<section id="result">
+<h1>🎉 You finished!</h1>
+<div class="picture" id="finalPicture">
+  <div class="tile t1 lit"><div class="art"></div></div><div class="tile t2 lit"><div class="art"></div></div>
+  <div class="tile t3 lit"><div class="art"></div></div><div class="tile t4 lit"><div class="art"></div></div>
+  <div class="tile t5 lit"><div class="art"></div></div><div class="tile t6 lit"><div class="art"></div></div>
+  <div class="tile t7 lit"><div class="art"></div></div><div class="tile t8 lit"><div class="art"></div></div>
+  <div class="tile t9 lit"><div class="art"></div></div><div class="tile t10 lit"><div class="art"></div></div>
+</div>
+<div class="bigscore" id="finalScore">0 / 10</div>
+<div class="resultmsg">You really know me right ❤️👐</div>
+<a class="whatsapp" href="https://wa.me/265984156505?text=Hey%20Upendo%20%F0%9F%92%9A%20I%20just%20finished%20your%20quiz!" target="_blank">💚🍏 DM me on WhatsApp</a>
+<button class="restart" id="restart">🔄 Play Again</button>
+<div class="small">The green button takes them straight to your WhatsApp DM.</div>
+</section>
+</div>
+
+<script>
+const questions=[
+["What's my favourite food?",["Rice and spaghetti","Pizza","Chips","Chicken"],0],
+["What's my girlfriend's name?",["Angel","Jazira","Natalia","Shaunette"],0],
+["What's my favourite colour?",["Blue","Black","Red","Green"],1],
+["How old am I?",["16","17","18","19"],1],
+["What's my secondary school?",["School A","School B","School C","School D"],0],
+["What's my music vibe?",["Afro / Reggae","Rock only","Classical only","Country only"],0],
+["What do I enjoy creating?",["Music and edits","Only drawings","Only games","Only sports"],0],
+["What name do I use for my creative brand?",["Slime Dad Studioz","Upendo Films","Black King Media","Angel Studio"],0],
+["What do I like my photos to look like?",["Sharp and realistic","Blurry","Old-fashioned","Pixelated"],0],
+["What should you do if you really know me?",["DM me ❤️","Ignore me","Leave the quiz","Nothing"],0]
+];
+
+let index=0,points=0,locked=false;
+const qEl=document.getElementById("question"), optEl=document.getElementById("options");
+const feedback=document.getElementById("feedback"), bar=document.getElementById("bar");
+
+function render(){
+ const [q,opts]=questions[index];
+ document.getElementById("progress").textContent=`Question ${index+1} of ${questions.length}`;
+ document.getElementById("score").textContent=`Score: ${points}`;
+ bar.style.width=`${(index/questions.length)*100}%`;
+ qEl.textContent=q; feedback.textContent=""; optEl.innerHTML=""; locked=false;
+ opts.forEach((text,n)=>{
+   const b=document.createElement("button"); b.className="option"; b.textContent=text;
+   b.addEventListener("click",()=>answer(n)); optEl.appendChild(b);
+ });
+}
+function answer(choice){
+ if(locked)return; locked=true;
+ const correct=choice===questions[index][2];
+ if(correct){
+   points++;
+   const tile=document.querySelectorAll("#picture .tile")[index];
+   tile.classList.add("lit","pulse");
+   feedback.textContent="✅ Correct! One picture tile is revealed!";
+ }else feedback.textContent="❌ Not quite — keep going!";
+ document.getElementById("score").textContent=`Score: ${points}`;
+ setTimeout(()=>{
+   index++;
+   if(index<questions.length) render(); else finish();
+ },650);
+}
+function finish(){
+ bar.style.width="100%";
+ document.getElementById("quiz").style.display="none";
+ document.getElementById("result").style.display="block";
+ document.getElementById("finalScore").textContent=`${points} / ${questions.length}`;
+}
+function restart(){
+ index=0;points=0;
+ document.querySelectorAll("#picture .tile").forEach(t=>t.classList.remove("lit","pulse"));
+ document.getElementById("quiz").style.display="block";
+ document.getElementById("result").style.display="none";
+ render();
+}
+document.getElementById("restart").addEventListener("click",restart);
+render();
+</script>
+</body>
+</html>
